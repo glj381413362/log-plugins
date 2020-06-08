@@ -1,18 +1,4 @@
-# 日常开发日志打印需要注意哪些地方
-
-1. 不能面向debug编程，过于依赖debug，应该多依赖日志输出;
-2. 代码开发测试完成之后不要急着提交，先跑一遍看看日志是否看得懂;
-3. 日志必须包含哪些信息：
-   – 每次请求的唯一id(便于从海量的日志里区分某次请求)；
-   – 每次请求的用户信息（从海量日志里快速找到该用户做了什么);
-4. 某些地方必须打印日志：
-   - 分支语句的变量必须打印日志，重要参数必须打印（比如订单code等）;
-   -  修改（包括新增）操作必须打印日志（出问题，做到有证可查）；
-   -  数据量大的时候需要打印数据量，及耗时（用于分析性能。比如查询一个列表，要打印结果列表大小）;
-
-# 开发过程中如何优雅解决以上问题
-
-## 日志插件安装
+# 日志插件安装
 
 下载源码，然后`mvn install`到自己的maven仓库，最后在项目中添加如下依赖:
 
@@ -40,312 +26,58 @@
 - %X{logjson} : 存放action、itemType和itemIds值
 - %X{code}: 方法内一些想存放入MDC的值
 
-## 日志插件使用
+# 日志平台（ELK）安装
 
-### 打印方法的入参和出参
+下载源码去到nodes-stand-alone目录执行`init.sh`脚本即可。这里搭建的ELK是在单台服务器上，不适合生产环境使用。
 
-经常出现正式环境出问题了，然后发现没有打印方法的入参和出参，然后重新发版就为了添加一条日志，虽然这种做法很low，但是是可能发生的。只需要添加一个@Log注解就能轻松解决。
+# 功能介绍
 
-#### 打印方法入参出参
+## 打印方法入参出参
 
-添加注解@Log，@Log默认是debug级别才会打印入参和出参的，可通过printInfoLog来控制是否打印
+方法添加注解`@Log`，所有入参、出参都打印
 
-1. printInfoLog为true，默认会打印INFO级别日志，但是会导致日志里增加
+## 过滤掉不需要打印的入参
 
-   ![](https://user-images.githubusercontent.com/19701761/84008646-b3883400-a9a4-11ea-9ad5-e7e93b7a8cd3.png)
+1. 方法添加`@Log(excludeInParam = {"arg1"})`:排除第二个参数不打印
+2. `@Log(excludeInParam = {"arg0", "arg1"})`:多个参数时，忽略掉多个参数不打印
+3. `@Log(excludeInParam = {"arg2.password"})`:忽略第二个参数的password属性不打印
 
-2. printInfoLog默认值为false，可通过动态修改某个类的日志级别为DEBUG，达到打印方法入参和出参的目的
+## 指定打印某些参数或属性
 
-   ![](https://user-images.githubusercontent.com/19701761/84008648-b420ca80-a9a4-11ea-8b74-6b9ae9922ff5.png)
+1. `@Log(includeInParam = {"arg2.name"})`:其他参数正常打印，第三个参数只打印user的name属性
+2. `@Log(excludeInParam = {"arg2.password"},includeInParam = {"arg2.password"})`:当excludeInParam排除参数的某个属性和includeInParam冲突时，includeInParam生效
+3. `@Log(excludeInParam = {"arg2"} , includeInParam = {"arg2.password"})`:当excludeInParam排除参数和includeInParam冲突时，excludeInParam生效
 
-#### 过滤掉不需要打印的入参
+## 日志包含用户信息
 
-当一个入参很大，某些数据打印出来没意义，或者属于敏感信息不能打印，可以通过excludeInParam过滤掉不打印。
+实现LogService接口,然后在方法上添加@Log注解即可让日志信息包含用户信息
 
-1. 多个参数时，忽略掉某个参数不打印
+## 日志信息包含唯一的key
 
-   ![](https://user-images.githubusercontent.com/19701761/84008655-b5ea8e00-a9a4-11ea-9d3f-7afb6e81510c.png)
+1. `@LogProfiler(itemIds = "order.orderCode")`:比如订单修改，希望每条日志都包含订单编号
+2. `@Log(itemIds = {"order.user.userCode","order.orderCode"})`:比如订单修改，希望每条日志都包含订单编号和订单所属用户
+3. `@Log(itemIds = {"orderEntryDetails[0].orderId"})`: 比如订单修改时，订单行处理时，希望每条日志信息包含订单id
 
-2. 多个参数时，忽略掉多个参数不打印
+## 日志信息包含被操作表信息及操作类型
 
-   ![](https://user-images.githubusercontent.com/19701761/84008662-b7b45180-a9a4-11ea-92d8-8e6d56ff93d0.png)
+`@Log(itemIds = {"orderDetailDTO.orderCode"},itemType = "order表",action = Action.U)`:当有海量日志时，可根据一条日志信息就能知道，具体用户对表的某条记录进行的具体的操作，及具体的操作内容。
 
-3. 忽略某个参数的某些属性不打印
+## 日志工具
 
-   ![](https://user-images.githubusercontent.com/19701761/84008669-b97e1500-a9a4-11ea-9c48-3b8f3002c2c0.png)
+1. `printCode(String describe, String separator, String... values)`:后续日志信息打印自定义描述和多个code值
+2. `printCode(String describe, String value)`:后续日志打印自定义描述和code值
+3. `printCodeByTemplate(String template, Object... values) `:后续日志打印自定义模板日志
 
-4. 参数时集合类型，忽略掉不打印
 
-   ![](https://user-images.githubusercontent.com/19701761/84009747-51c8c980-a9a6-11ea-998a-4f78349cf8c6.png)
 
-#### 指定打印某些参数或属性
+# 日志插件使用
 
-当一个方法有多个入参，可以通过includeInParam或param指定打印某些参数，或某些参数的指定属性，从而只打印自己关心部分的日志，减少日志量。
+具体使用案例可参考:
 
-1. 打印某个参数的指定属性，其它参数正常打印
+[CSDN]: https://blog.csdn.net/qq_21239913/article/details/106624875
+[博客]: http://jessica.glj-site.com:8888/?p=251
 
-   ![](https://user-images.githubusercontent.com/19701761/84009756-555c5080-a9a6-11ea-9f55-b4a96c47885c.png)
-
-2. 当excludeInParam排除参数的某个属性和includeInParam冲突时，includeInParam生效
-
-   ![](https://user-images.githubusercontent.com/19701761/84009760-568d7d80-a9a6-11ea-8c92-88216c204ca4.png)
-
-3. 当excludeInParam排除参数和includeInParam冲突时，excludeInParam生效
-
-   ![](https://user-images.githubusercontent.com/19701761/84009765-57261400-a9a6-11ea-8ddd-f8471db487d5.png)
-
-4. 当配置了param，就只会打印param配置的参数，此时excludeInParam和includeInParam不会生效
-
-   ![](https://user-images.githubusercontent.com/19701761/84009767-57beaa80-a9a6-11ea-8193-cf58d7624e10.png)
-
-#### 出参只打印数组大小
-
-当方法的出参是一个集合时，可通过printOutParamSize控制是打印集合详情，还是只打印集合大小；在controller层，往往出参是包了一层，真正的数据只是出参对象的一个属性值，此时可通过继承FilterResultService类，实现shouldFilter方法和filter方法，对结果进行处理，已达到只打印集合大小和真正的数据详情。
-
-```java
-public abstract class FilterResultService<T, U> {
-	public abstract boolean shouldFilter(U u);
-
-	public Optional<T> filterResult(U u) {
-		if (shouldFilter(u)) {
-			log.info("Start dealing with the results");
-			return Optional.ofNullable(filter(u));
-		}
-		return null;
-	}
-	public abstract T filter(U u);
-}
-```
-
-默认了一个DefaultFilterResultServiceImpl对结果进行处理：
-
-```java
-@Component
-public class DefaultFilterResultServiceImpl extends FilterResultService {
-	@Override
-	public boolean shouldFilter(Object o) {
-		return false;
-	}
-	@Override
-	public Object filter(Object o) {
-		return o;
-	}
-}
-```
-
-
-
-### 日志尽可能多的包含有用信息
-
-在尽可能包含更多有效信息的同时，不能增加太多的额外工作；
-
-#### 日志包含用户信息
-
-实现LogService接口,然后再方法上添加@Log注解即可
-
-```java
-@Component
-public class UserInfoService implements LogService {
-
-  /**
-   * 获取用户信息，用于放入日志框架的MDC里
-   *
-   * @return java.lang.String
-   * @author gongliangjun 2019-12-19 3:33 PM
-   */
-  @Override
-  public String getUserInfo() {
-    // 这里为了测试，模拟从请求中获取用户信息，可根据自己实际情况修改
-    return "admin001";
-  }
-```
-
-在查询订单列表上添加@Log注解
-
-![](https://user-images.githubusercontent.com/19701761/84008610-ac612600-a9a4-11ea-962a-b43cda87f838.png)
-
-#### 日志信息包含唯一的key
-
-1. 比如订单修改，希望每条日志都包含订单编号
-
-   ![](https://user-images.githubusercontent.com/19701761/84008625-aec38000-a9a4-11ea-9379-91deb9c10a5c.png)
-
-2. 比如订单修改，希望每条日志都包含订单编号和订单所属用户
-
-   这里的用户在请求pojo的orderDetailDTO.user.userCode里，所以注解是 `@Log(itemIds = {"orderDetailDTO.user.userCode"})`
-
-![](https://user-images.githubusercontent.com/19701761/84008633-b08d4380-a9a4-11ea-858c-1cfaf3b23dcb.png)
-
-3. 比如订单修改时，订单行处理时，希望每条日志信息包含订单id
-
-   处理订单行方法入参是一个集合，所以注解是`@Log(itemIds = {"orderEntryDetails[0].orderId"})`
-
-   ![](https://user-images.githubusercontent.com/19701761/84008638-b08d4380-a9a4-11ea-80ac-c902d6d2e751.png)
-
-#### 日志信息包含被操作表信息及操作类型
-
-比如在修改或者删除时，希望日志信息包含被操作的表和具体操作类型，以备出现问题时有证可查，这里需要用@Log的itemType和action，itemType表示表类型，action表示操作类型，操作有6种：
-
-- A 新增操作
-- D 删除操作
-- U 更新操作
-- Q 查询操作
-- LQ 查询列表操作
-- NULL 其他操作
-
-添加注解`@Log(itemIds = {"orderDetailDTO.orderCode"},itemType = "order表",action = Action.U)`，效果如下:
-
-![](https://user-images.githubusercontent.com/19701761/84008643-b2570700-a9a4-11ea-98c9-cd33f2cceb22.png)
-
-当有海量日志时，我们根据上图一条日志信息就能知道，用户admin001对order表orderCode为MO001的订单进行了更新操作，已经具体的更新内容。
-
-#### 多个方法使用@Log注解
-
-这里我以一个尽可能真实的案例来举例。一个订单详情查询接口，其中包含订单头详情、订单行详情、产品详情和用户详情4个方法，大概调用情况如下：
-
-![](https://user-images.githubusercontent.com/19701761/84009785-5b523180-a9a6-11ea-8245-d2fd7ad25016.jpg)
-
-`queryOrderDetail`、`conversionOrder` 、 `conversionOrderEntry`、 `conversionSku`和 `conversionUser`几个方法都加@Log注解，@Log主要是基于MDC实现的，所以在`queryOrderDetail`方法调用方法`conversionOrder`，进入`conversionOrder`方法时，MDC里存入的就是`conversionOrder`方法相关的值，再回到前方法`queryOrderDetail`时，MDC中应该切换为方法`queryOrderDetail`的值。所以这里存在一个方法调用栈，也需要一个上下文来存储方法相关的MDC值。所以这里我使用了一个`LogThreadContext`上下文来存储方法相关的MDC值，和管理方法调用关系的一个stack，然后把LogThreadContext放入到`InheritableThreadLocal`中。
-
-具体调用时，日志打印效果如下:
-
-![](https://user-images.githubusercontent.com/19701761/84009768-57beaa80-a9a6-11ea-941b-85409d551eb0.png)以上每条日志信息都包含一个唯一的tranceID,配合日志框架，比如ELK(项目也有基于docker 快速搭建ELK日志平台的脚本)，便可以从海量日志里快速筛选出一次请求的所有日志；也包含了此次请求的用户(实现接口LogService获取用户信息)；也包含了每个方法特定的key，方便程序员追溯问题。
-
-### 日志工具使用
-
-通过LogUtil提供的一下方法，可以在项目开发中使打印的日志信息更有意义，简便了日志打印，从而提高工作效率。LogUtil中简便打印日志的方法，主要使用场景还是在实际项目中，当遇到循环处理逻辑时，循环体逻辑复杂，这时候需要循环体里的日志每条都包含具体处理记录的信息。LogUtil主要提供了如下几个方法：
-
-1.  printCode(String describe, String separator, String... values)
-
-   打印自定义描述和多个code值 需要配合@log或@LogProfiler注解一起使用，MDC才能清空 一般在循环内使用,循环结
-
-   束要调用clearMDC()
-
-   ```java
-   # 例子：
-   for (OrderEntry orderEntry : orderEntries) {
-           LogUtil.printCode("orderEntry skuid和数量", "-", orderEntry.getSkuId().toString(),orderEntry.getQuantity().toString());
-           log.info("开始处理...");
-           log.info("处理中");
-           log.info("处理结束");
-           LogUtil.clearMDC();
-   }
-   结果：
-   INFO [(orderEntry skuid和数量:1-21)]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [(orderEntry skuid和数量:1-21)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [(orderEntry skuid和数量:1-21)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   ```
-
-2.  printCode(String describe, String value)
-
-   打印自定义描述和code值 需要配合@log或@LogProfiler注解一起使用，MDC才能清空 一般在循环内使用,循环结束要调用clearMDC()
-
-   ```java
-   # 例子：orderEntries 有两条数据
-   for (OrderEntry orderEntry : orderEntries) {
-           LogUtil.printCode("处理的skuid", orderEntry.getSkuId().toString());
-           log.info("开始处理...");
-           log.info("处理中");
-           log.info("处理结束");
-           LogUtil.clearMDC();
-   }
-   结果：
-   INFO [(处理的skuid:1)]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [(处理的skuid:1)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [(处理的skuid:1)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   INFO [(处理的skuid:2)]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [(处理的skuid:2)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [(处理的skuid:2)]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   ```
-
-3.  printCode(String value) 
-
-    打印特定code值 需要配合@log注解一起使用，MDC才能清空 一般在循环内使用,循环结束要调用clearMDC()
-
-   ```java
-   例子：orderEntries 有两条数据
-   for (OrderEntry orderEntry : orderEntries) {
-           LogUtil.printCode(orderEntry.getSkuId().toString());
-           log.info("开始处理...");
-           log.info("处理中");
-           log.info("处理结束");
-           LogUtil.clearMDC();
-   }
-   结果：
-   INFO [1]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [1]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [1]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   INFO [2]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [2]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [2]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   ```
-
-4.  printCodeByTemplate(String template, Object... values) 
-
-   自定义模板打印日志 需要配合@log注解一起使用，MDC才能清空 一般在循环内使用,循环结束要调用clearMDC()
-
-   ```java
-   # 例子：orderEntries 有两条数据
-   for (OrderEntry orderEntry : orderEntries) {
-           LogUtil.printCodeByTemplate("skuId[{}] 数量[{}]",orderEntry.getSkuId(),orderEntry.getQuantity());
-           log.info("开始处理...");
-           log.info("处理中");
-           log.info("处理结束");
-           LogUtil.clearMDC();
-   }
-   结果：
-   INFO [skuId:1 数量:21]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [skuId:1 数量:21]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [skuId:1 数量:21]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   INFO [skuId:2 数量:11]c.enhance.logplugin.demo.service.OrderServiceImpl - 开始处理...
-   INFO [skuId:2 数量:11]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理中
-   INFO [skuId:2 数量:11]c.enhance.logplugin.demo.service.OrderServiceImpl - 处理结束
-   
-   ```
-
-### 方法执行耗时统计
-
-实际项目可能需要对一个方法执行耗时进行统计，以便找到效率比较低的方法，后续好做系统优化。通过日志插件的`@EnableProfiler`和`@LogProfiler`注解，可以轻松实现对一个方法执行时间进行统计。`@EnableProfiler`只对方法进行耗时统计，不具备打印日志功能；`@LogProfiler`具备日志打印和耗时统计功能，相当于@Log和@`@EnableProfiler`。
-
-#### 方法调用执行耗时统计
-
-这里还是以订单详情查询作为例子，在每个需要统计的方法上添加`@EnableProfiler`或`@LogProfiler`注解
-
-![](https://user-images.githubusercontent.com/19701761/84009775-59886e00-a9a6-11ea-9745-27fbd111f040.png)
-
-#### 方法内代码块执行耗时统计
-
-这里还是以订单详情查询接口举例，在queryOrderDetail方法内单独统计了查询一个订单所用时长，和模拟一段复杂逻辑执行所用时长。通过LogUtil的`startProfiler(name)`方法对方法内的代码块执行耗时进行统计，然后在整个执行耗时统计里打印出来。
-
-```java
-  @LogProfiler(itemIds = "orderCode")
-  @Override
-  public OrderDetailDTO queryOrderDetail(String orderCode) {
-    log.info("开始处理订单数据");
-    SleepUtil.threadSleep(2);
-    Order order1 = new Order();
-    order1.setOrderCode(orderCode); 
-    // 想统计查询一个订单所用时间
-    LogThreadContext ltc = LogUtil.startProfiler("findOne");
-    Optional<Order> orderOptional = orderMapper.findOne(Example.of(order1));
-    ltc.stopInstantProfiler();
-
-    //统计一段复杂逻辑耗时
-    LogUtil.startProfiler("复杂逻辑统计");
-    log.info("模拟这里需要处理一大段逻辑");
-    SleepUtil.threadSleep(4,10);
-    ltc.stopInstantProfiler();
-    ......
-    ......
-    log.info("订单数据处理完成");
-    return detailDTO;
-  }
-
-```
-
-![](https://user-images.githubusercontent.com/19701761/84009777-5a210480-a9a6-11ea-9eb5-c0a2b012e354.png)
-
-## 日志插件核心类
+# 日志插件核心类
 
 1. LogThreadContext日志上下文，存放了方法相关的日志信息
 

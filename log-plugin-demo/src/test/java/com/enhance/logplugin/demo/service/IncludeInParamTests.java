@@ -44,63 +44,6 @@ public class IncludeInParamTests {
     proxy.includeInParamTest2("test2", bDto, user);
     proxy.inludeInParamTest3("test3", bDto, user);
 
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
-    log.info("a");
   }
 
   /**

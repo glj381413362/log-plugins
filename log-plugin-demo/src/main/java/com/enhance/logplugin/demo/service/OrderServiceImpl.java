@@ -1,6 +1,5 @@
 package com.enhance.logplugin.demo.service;
 
-import com.common.tools.util.AopProxy;
 import com.common.tools.util.BeanUtil;
 import com.common.tools.util.ListUtil;
 import com.common.tools.util.exception.CommonException;
@@ -10,6 +9,7 @@ import com.enhance.annotations.Log;
 import com.enhance.annotations.LogProfiler;
 import com.enhance.aspect.LogThreadContext;
 import com.enhance.constant.LogConst.Action;
+import com.enhance.logplugin.demo.AopProxy;
 import com.enhance.logplugin.demo.controller.dto.OrderDetailDTO;
 import com.enhance.logplugin.demo.controller.dto.OrderDetailDTO.OrderEntryDetail;
 import com.enhance.logplugin.demo.controller.dto.OrderDetailDTO.UserDTO;

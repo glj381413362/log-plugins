@@ -8,9 +8,9 @@ RES="\033[0m"
 
 echo -e "${BLUE_COLOR}# ###################################################################################################${RES}"
 echo -e "${BLUE_COLOR}#                       Docker ELK Shell Script                                                     #${RES}"
-echo -e "${BLUE_COLOR}#                       Blog: http://jessica.glj-site.com:8888                                      #${RES}"
-echo -e "${BLUE_COLOR}#                       CSDN: https://blog.csdn.net/qq_21239913       							  #${RES}"
-echo -e "${BLUE_COLOR}#                       GitHub: https://github.com/glj381413362/common-plugin/tree/master/log-plugin#${RES}"
+echo -e "${BLUE_COLOR}#                       Blog: http://jessica.glj-site.com:8888/?p=251                               #${RES}"
+echo -e "${BLUE_COLOR}#                       CSDN: https://blog.csdn.net/qq_21239913/article/details/106624875       		#${RES}"
+echo -e "${BLUE_COLOR}#                       GitHub: https://github.com/glj381413362/log-plugins                         #${RES}"
 echo -e "${BLUE_COLOR}# ###################################################################################################${RES}"
 
 echo -e "${GREEN_COLOR}>>>>>>>>>>>>>>>>>> The Start <<<<<<<<<<<<<<<<<<${RES}"

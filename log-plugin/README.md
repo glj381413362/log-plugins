@@ -1,4 +1,3 @@
-
 # 日常开发日志打印需要注意哪些地方
 
 1. 不能面向debug编程，过于依赖debug，应该多依赖日志输出;
@@ -53,11 +52,11 @@
 
 1. printInfoLog为true，默认会打印INFO级别日志，但是会导致日志里增加
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/6.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008646-b3883400-a9a4-11ea-9ad5-e7e93b7a8cd3.png)
 
 2. printInfoLog默认值为false，可通过动态修改某个类的日志级别为DEBUG，达到打印方法入参和出参的目的
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/7.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008648-b420ca80-a9a4-11ea-8b74-6b9ae9922ff5.png)
 
 #### 过滤掉不需要打印的入参
 
@@ -65,19 +64,19 @@
 
 1. 多个参数时，忽略掉某个参数不打印
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/8.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008655-b5ea8e00-a9a4-11ea-9d3f-7afb6e81510c.png)
 
 2. 多个参数时，忽略掉多个参数不打印
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/9.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008662-b7b45180-a9a4-11ea-92d8-8e6d56ff93d0.png)
 
 3. 忽略某个参数的某些属性不打印
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/10.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008669-b97e1500-a9a4-11ea-9c48-3b8f3002c2c0.png)
 
 4. 参数时集合类型，忽略掉不打印
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/11.png)
+   ![](https://user-images.githubusercontent.com/19701761/84009747-51c8c980-a9a6-11ea-998a-4f78349cf8c6.png)
 
 #### 指定打印某些参数或属性
 
@@ -85,19 +84,19 @@
 
 1. 打印某个参数的指定属性，其它参数正常打印
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/12.png)
+   ![](https://user-images.githubusercontent.com/19701761/84009756-555c5080-a9a6-11ea-9f55-b4a96c47885c.png)
 
 2. 当excludeInParam排除参数的某个属性和includeInParam冲突时，includeInParam生效
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/13.png)
+   ![](https://user-images.githubusercontent.com/19701761/84009760-568d7d80-a9a6-11ea-8c92-88216c204ca4.png)
 
 3. 当excludeInParam排除参数和includeInParam冲突时，excludeInParam生效
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/14.png)
+   ![](https://user-images.githubusercontent.com/19701761/84009765-57261400-a9a6-11ea-8ddd-f8471db487d5.png)
 
 4. 当配置了param，就只会打印param配置的参数，此时excludeInParam和includeInParam不会生效
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/15.png)
+   ![](https://user-images.githubusercontent.com/19701761/84009767-57beaa80-a9a6-11ea-8193-cf58d7624e10.png)
 
 #### 出参只打印数组大小
 
@@ -163,27 +162,25 @@ public class UserInfoService implements LogService {
 
 在查询订单列表上添加@Log注解
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/1.png)
+![](https://user-images.githubusercontent.com/19701761/84008610-ac612600-a9a4-11ea-962a-b43cda87f838.png)
 
 #### 日志信息包含唯一的key
 
 1. 比如订单修改，希望每条日志都包含订单编号
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/2.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008625-aec38000-a9a4-11ea-9379-91deb9c10a5c.png)
 
 2. 比如订单修改，希望每条日志都包含订单编号和订单所属用户
 
-   这里的用户在请求pojo的orderDetailDTO.user.userCode里，所以注解是
+   这里的用户在请求pojo的orderDetailDTO.user.userCode里，所以注解是 `@Log(itemIds = {"orderDetailDTO.user.userCode"})`
 
-3. `@Log(itemIds = {"orderDetailDTO.user.userCode"})`
+![](https://user-images.githubusercontent.com/19701761/84008633-b08d4380-a9a4-11ea-858c-1cfaf3b23dcb.png)
 
-4. ![img](file:///Users/gongliangjun/%E5%9B%BE%E5%BA%8A/log%E6%8F%92%E4%BB%B6/3.png?lastModify=1591087804)
-
-5. 比如订单修改时，订单行处理时，希望每条日志信息包含订单id
+3. 比如订单修改时，订单行处理时，希望每条日志信息包含订单id
 
    处理订单行方法入参是一个集合，所以注解是`@Log(itemIds = {"orderEntryDetails[0].orderId"})`
 
-   ![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/4.png)
+   ![](https://user-images.githubusercontent.com/19701761/84008638-b08d4380-a9a4-11ea-80ac-c902d6d2e751.png)
 
 #### 日志信息包含被操作表信息及操作类型
 
@@ -198,7 +195,7 @@ public class UserInfoService implements LogService {
 
 添加注解`@Log(itemIds = {"orderDetailDTO.orderCode"},itemType = "order表",action = Action.U)`，效果如下:
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/5.png)
+![](https://user-images.githubusercontent.com/19701761/84008643-b2570700-a9a4-11ea-98c9-cd33f2cceb22.png)
 
 当有海量日志时，我们根据上图一条日志信息就能知道，用户admin001对order表orderCode为MO001的订单进行了更新操作，已经具体的更新内容。
 
@@ -206,13 +203,13 @@ public class UserInfoService implements LogService {
 
 这里我以一个尽可能真实的案例来举例。一个订单详情查询接口，其中包含订单头详情、订单行详情、产品详情和用户详情4个方法，大概调用情况如下：
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/订单详情时序图.jpg)
+![](https://user-images.githubusercontent.com/19701761/84009785-5b523180-a9a6-11ea-8245-d2fd7ad25016.jpg)
 
 `queryOrderDetail`、`conversionOrder` 、 `conversionOrderEntry`、 `conversionSku`和 `conversionUser`几个方法都加@Log注解，@Log主要是基于MDC实现的，所以在`queryOrderDetail`方法调用方法`conversionOrder`，进入`conversionOrder`方法时，MDC里存入的就是`conversionOrder`方法相关的值，再回到前方法`queryOrderDetail`时，MDC中应该切换为方法`queryOrderDetail`的值。所以这里存在一个方法调用栈，也需要一个上下文来存储方法相关的MDC值。所以这里我使用了一个`LogThreadContext`上下文来存储方法相关的MDC值，和管理方法调用关系的一个stack，然后把LogThreadContext放入到`InheritableThreadLocal`中。
 
 具体调用时，日志打印效果如下:
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/16.png)以上每条日志信息都包含一个唯一的tranceID,配合日志框架，比如ELK(项目也有基于docker 快速搭建ELK日志平台的脚本)，便可以从海量日志里快速筛选出一次请求的所有日志；也包含了此次请求的用户(实现接口LogService获取用户信息)；也包含了每个方法特定的key，方便程序员追溯问题。
+![](https://user-images.githubusercontent.com/19701761/84009768-57beaa80-a9a6-11ea-941b-85409d551eb0.png)以上每条日志信息都包含一个唯一的tranceID,配合日志框架，比如ELK(项目也有基于docker 快速搭建ELK日志平台的脚本)，便可以从海量日志里快速筛选出一次请求的所有日志；也包含了此次请求的用户(实现接口LogService获取用户信息)；也包含了每个方法特定的key，方便程序员追溯问题。
 
 ### 日志工具使用
 
@@ -314,7 +311,7 @@ public class UserInfoService implements LogService {
 
 这里还是以订单详情查询作为例子，在每个需要统计的方法上添加`@EnableProfiler`或`@LogProfiler`注解
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/17.png)
+![](https://user-images.githubusercontent.com/19701761/84009775-59886e00-a9a6-11ea-9745-27fbd111f040.png)
 
 #### 方法内代码块执行耗时统计
 
@@ -346,7 +343,7 @@ public class UserInfoService implements LogService {
 
 ```
 
-![](https://jessica-1259671334.cos.ap-chengdu.myqcloud.com/blog/log%E6%8F%92%E4%BB%B6/18.png)
+![](https://user-images.githubusercontent.com/19701761/84009777-5a210480-a9a6-11ea-9eb5-c0a2b012e354.png)
 
 ## 日志插件核心类
 
