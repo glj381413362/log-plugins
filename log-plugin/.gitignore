@@ -1,0 +1,34 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+**/out
+
+# Mac
+.DS_Store
+
+# Maven
+**/log/
+**/target
+**/*.log
+**/tmp
+**/.tmp
+**/bin/**
+
+**.retry
+.git-credentials
+/logs/
+gui-extension/
+/redis-plugin/.idea/
+/redis-plugin/.mvn/
+/redis-plugin/mvnw.cmd
+/redis-plugin/mvnw
+/redis-plugin/redis-plugin.iml
+workspace

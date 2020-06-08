@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.enhance</groupId>
+    <artifactId>log-plugin-zipkin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <build.encoding>UTF-8</build.encoding>
+        <spring-boot.repackage.skip>false</spring-boot.repackage.skip>
+
+        <spring-cloud-build.version>2.0.4.RELEASE</spring-cloud-build.version>
+
+
+        <log-plugin.version>1.0-SNAPSHOT</log-plugin.version>
+    </properties>
+
+    <distributionManagement>
+        <!--
+                <repository>
+                    <id>hmall-plugins-mixed</id>
+                    <name>hmall plugins mixed Repository</name>
+                    <url>http://test.sgp.shou-xuan.com:30107/repository/hmall-plugins-mixed</url>
+                </repository>
+                </repository>
+                <snapshotRepository>
+                    <id>hmall-plugins-mixed</id>
+                    <name>hmall plugins mixed Repository</name>
+                    <url>http://test.sgp.shou-xuan.com:30107/repository/hmall-plugins-mixed</url>
+                </snapshotRepository>-->
+        <!--黄河-->
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/113211-release-NElI5e/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/113211-snapshot-KMf78c/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.enhance</groupId>
+            <artifactId>log-plugin</artifactId>
+            <version>${log-plugin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <version>${spring-cloud-build.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: zipkin-server
+
+server:
+  port: 9411
+

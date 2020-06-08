@@ -1,0 +1,7 @@
+my:
+  mdc:
+    params: "{1:'${NGINX_HTML_ROOT1:/Users/gongliangjun/workspace_msb/product/src/main/resources/temp/}',1:'${NGINX_HTML_ROOT2:/Users/gongliangjun/workspace_msb/product/src/main/resources/temp2/}'}"
+
+nginx:
+  html:
+    rootsmap: "{1:'${NGINX_HTML_ROOT1:/Users/gongliangjun/workspace_msb/product/src/main/resources/temp/}',2:'${NGINX_HTML_ROOT2:/Users/gongliangjun/workspace_msb/product/src/main/resources/temp2/}'}"

@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+#    url: jdbc:h2:mem:glj_test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./h2data;AUTO_SERVER=TRUE
+    platform: h2
+    username: glj
+    password: glj123
+    driverClassName: org.h2.Driver
+#    schema: classpath:db/schema.sql   #进行该配置后，每次启动程序，程序都会运行resources/db/schema.sql文件，对数据库的结构进行操作。
+#    data: classpath:db/data/*.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/的sql文件，对数据库的数据操作。
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: true
+        format_sql: true
+    show-sql: true #启用SQL语句的日志记录
+  h2:
+    console:
+      enabled: true #进行该配置，程序开启时就会启动h2 web consloe。当然这是默认的，如果你不想在启动程序时启动h2 web consloe，那么就设置为false。
+      path: /console #进行该配置，你就可以通过YOUR_URL/h2访问h2 web consloe。YOUR_URL是你程序的访问URl。
+      settings:
+        trace: false
+        web-allow-others: true  # 进行该配置后，h2 web consloe就可以在远程访问了。否则只能在本机访问。
+
+
+#log
+logging:
+  level:
+    com.enhance.logplugin.demo: debug
