@@ -72,10 +72,7 @@
 
 # 日志插件使用
 
-具体使用案例可参考:
-
-[CSDN]: https://blog.csdn.net/qq_21239913/article/details/106624875
-[博客]: http://jessica.glj-site.com:8888/?p=251
+具体使用案例可参考:[CSDN](https://blog.csdn.net/qq_21239913/article/details/106624875)  、[博客](http://jessica.glj-site.com:8888/?p=251)  
 
 # 日志插件核心类
 
