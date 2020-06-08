@@ -1,4 +1,4 @@
-
+![](https://user-images.githubusercontent.com/19701761/84007938-ad458800-a9a3-11ea-8da9-4b0c1d7dc5e8.png)
 # 日常开发日志打印需要注意哪些地方
 
 1. 不能面向debug编程，过于依赖debug，应该多依赖日志输出;
