@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * <p>
  *
+ *   这个测试类跑不起来，要运行可运行log-plugin-demo里测试
  * </p>
  *
  * @author gongliangjun 2019/07/01 11:18
