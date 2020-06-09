@@ -51,7 +51,8 @@ public class ProfilerAOP {
     //===============================================================================
     if (ltc.isFirstMethod() && null != parent) {
       TimeInstrument timeInstrument = parent.stop();
-      timeInstrument.print();
+      timeInstrument.log();
+//      timeInstrument.print();
       ProfilerRegistry profilerRegistry = ProfilerRegistry.getThreadContextInstance();
       profilerRegistry.clear();
       ltc.removeCurrentProfiler();

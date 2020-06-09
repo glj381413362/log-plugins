@@ -28,7 +28,7 @@
 
 # 日志平台（ELK）安装
 
-下载源码去到nodes-stand-alone目录执行`init.sh`脚本即可。这里搭建的ELK是在单台服务器上，不适合生产环境使用。
+下载源码去到nodes-stand-alone目录执行`init.sh`脚本即可,具体搭建参考[CSDN](https://blog.csdn.net/qq_21239913/article/details/103888765)或[博客](http://jessica.glj-site.com:8888/?p=211)。这里搭建的ELK是在单台服务器上，不适合生产环境使用。
 
 # 功能介绍
 
