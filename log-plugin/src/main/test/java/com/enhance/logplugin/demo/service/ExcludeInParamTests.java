@@ -7,6 +7,7 @@ import com.enhance.logplugin.demo.dto.UserDto;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.XSlf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * <p>
  *
- *   这个测试类跑不起来，要运行可运行log-plugin-demo里测试
  * </p>
  *
  * @author gongliangjun 2019/07/01 11:18
@@ -56,6 +56,7 @@ public class ExcludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg1"})
   public void excludeInParamTest1(String a, BDto bDto, UserDto user) {
 
@@ -72,6 +73,7 @@ public class ExcludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg0", "arg1"})
   public void excludeInParamTest2(String a, BDto bDto, UserDto user) {
 
@@ -88,6 +90,7 @@ public class ExcludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg2.password"})
   public void excludeInParamTest3(String a, BDto bDto, UserDto user) {
 
@@ -104,9 +107,9 @@ public class ExcludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg3"})
   public void excludeInParamTest4(String a, BDto bDto, UserDto user, Map map) {
-
     log.info("------------- excludeInParamTest4 start------------- ");
     log.info("参数是集合或者map时,使用 'arg+数字' 来进行排除");
     log.info("@Log(excludeInParam = {\"arg2.password\"})");

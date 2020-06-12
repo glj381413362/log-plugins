@@ -7,6 +7,7 @@ import com.enhance.logplugin.demo.dto.UserDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.XSlf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -15,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * <p>
- *   这个测试类跑不起来，要运行可运行log-plugin-demo里测试
+ *
  * </p>
  *
  * @author gongliangjun 2019/07/01 11:18
@@ -60,6 +61,7 @@ public class ParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg2.name"}, includeInParam = {"arg2.password"}, param = {"user.name", "a", "bDto.id","userDtos[1].password"})
   public void paramTest1(String a, BDto bDto, UserDto user, List<UserDto> userDtos) {
 
