@@ -5,6 +5,7 @@ import com.enhance.aspect.LogAOP;
 import com.enhance.logplugin.demo.dto.BDto;
 import com.enhance.logplugin.demo.dto.UserDto;
 import lombok.extern.slf4j.XSlf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -52,6 +53,7 @@ public class IncludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(includeInParam = {"arg2.name"})
   public void includeInParamTest1(String a, BDto bDto, UserDto user) {
 
@@ -70,6 +72,7 @@ public class IncludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg2.password"},includeInParam = {"arg2.password"})
   public void includeInParamTest2(String a, BDto bDto, UserDto user) {
 
@@ -85,6 +88,7 @@ public class IncludeInParamTests {
    * @return void
    * @author gongliangjun 2020-06-05 5:24 PM
    */
+  @Ignore
   @Log(excludeInParam = {"arg2"} , includeInParam = {"arg2.password"})
   public void inludeInParamTest3(String a, BDto bDto, UserDto user) {
 
