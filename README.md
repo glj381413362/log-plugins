@@ -79,6 +79,14 @@
 1. 方法调用执行耗时统计
 2. 方法内代码块执行耗时统计
 
+## 请求traceID uri配置
+traceID 唯一确定某次请求
+```yml
+need:
+  addTraceId:
+    uris: /v1/*,/v2/*
+```
+
 ## 日志工具
 
 1. `printCode(String describe, String separator, String... values)`:后续日志信息打印自定义描述和多个code值
