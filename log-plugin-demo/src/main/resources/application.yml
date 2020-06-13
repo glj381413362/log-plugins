@@ -36,3 +36,7 @@ spring:
 logging:
   level:
     com.enhance.logplugin.demo: debug
+
+need:
+  addTraceId:
+    uris1: /*,/v1/*
