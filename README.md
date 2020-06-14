@@ -79,12 +79,24 @@
 1. 方法调用执行耗时统计
 2. 方法内代码块执行耗时统计
 
-## 请求traceID uri配置
-traceID 唯一确定某次请求
+## 请求traceID配置
+1. 请求traceID uri配置
 ```yml
-need:
+log-plugin:
   addTraceId:
     uris: /v1/*,/v2/*
+```
+2. zuul网关traceID传递开启配置
+```yml
+log-plugin:
+  zuul:
+    enable: true
+```
+3. feign traceID 传递开启配置 
+```yml
+log-plugin:
+  feignTrace:
+    enable: true
 ```
 
 ## 日志工具
