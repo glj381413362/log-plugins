@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * fegin traceId 传递
+ * 当配置了属性log-plugin.feignTrace.enable=true才会加载该类
  *
  * @author gongliangjun 2020/06/14 11:26 AM
  */
