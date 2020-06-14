@@ -10,8 +10,8 @@ spring:
     username: glj
     password: glj123
     driverClassName: org.h2.Driver
-    schema: classpath:db/schema.sql   #进行该配置后，每次启动程序，程序都会运行resources/db/schema.sql文件，对数据库的结构进行操作。
-    data: classpath:db/data/*.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/的sql文件，对数据库的数据操作。
+#    schema: classpath:db/schema.sql   #进行该配置后，每次启动程序，程序都会运行resources/db/schema.sql文件，对数据库的结构进行操作。
+#    data: classpath:db/data/*.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/的sql文件，对数据库的数据操作。
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -37,6 +37,10 @@ logging:
   level:
     com.enhance.logplugin.demo: debug
 
-need:
+log-plugin:
+  zuul:
+    enable: true
+  feignTrace:
+    enable: true
   addTraceId:
-    uris1: /*,/v1/*
+    uri: /*

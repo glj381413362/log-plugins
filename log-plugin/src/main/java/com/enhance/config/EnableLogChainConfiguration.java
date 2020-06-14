@@ -3,26 +3,30 @@ package com.enhance.config;
 import static javax.servlet.DispatcherType.REQUEST;
 
 import com.enhance.core.filter.AddTraceIdFilter;
-import java.util.HashSet;
+import com.enhance.core.filter.FeignTraceRequestInterceptor;
+import com.enhance.core.filter.ZuulHeaderFilter;
+import com.netflix.zuul.ZuulFilter;
+import feign.RequestInterceptor;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 /**
- * <p>
- *
- * </p>
+ *  请求traceID相关bean配置类
+ *  启动类使用@EnableLogChain注解开启
  *
  * @author gongliangjun 2019/07/01 11:18
  */
 @Slf4j
 @Configuration
 public class EnableLogChainConfiguration {
-
-	private final String logPluginsBanner=" \r\n"
+	private final static String logPluginsBanner=" \r\n"
 			+ " =======================================================================================================================================================================\n"
 			+ "||.   .  .          ,.             .  .       .                            .    ,--. ,--.   ,    ,    ,  ,--. ,--. ,--. ,--.     .                 .                    ||\n"
 			+ "|||-. |- |- ,-. ,-. `'   , , ,-. . |- |-. . . |-.    ,-. ,-. ,-,-.   , ,-. |  .  __| \\__/  /|   /|   /|   __|  __| |__     /   , |  ,-. ,-.    ,-. |  . . ,-. . ,-. ,-. ||\n"
@@ -31,8 +35,49 @@ public class EnableLogChainConfiguration {
 			+ "||          |                 ,|                                        ,|    |                                                          ,|    |           ,|           ||\n"
 			+ "||          '                 `'                                        `'   `'                                                          `'    '           `'           ||\n"
 			+ " =======================================================================================================================================================================";
-	@Value("#{'${need.addTraceId.uris: /* }'.trim().split(',')}")
-	private HashSet<String> traceUris;
+
+	@Value("#{'${log-plugin.addTraceId.uri: /* }'.trim().split(',')}")
+	private List<String> traceUris;
+
+
+	/**
+	 * 使用zuul做网关时,traceId通过header传递，需要手动添加
+	 *
+	 *
+	 * @author gongliangjun 2020-06-14 11:19 AM
+	 * @return com.netflix.zuul.ZuulFilter
+	 */
+	@ConditionalOnProperty(
+			prefix = "log-plugin.zuul",
+			name = {"enable"},
+			havingValue = "true"
+	)
+	@ConditionalOnBean(name = "zuulProxyMarkerBean")
+	@Bean
+	public ZuulFilter zuulTraceIdFilter(){
+		// 使用的zuul网关\c\u000d log.info("注册bean zuulTraceIdFilter");
+		return new ZuulHeaderFilter();
+	}
+	/**
+	 * 开启fegin traceID传递
+	 *
+	 *
+	 * @author gongliangjun 2020-06-14 11:41 AM
+	 * @return feign.RequestInterceptor
+	 */
+	@ConditionalOnProperty(
+			prefix = "log-plugin.feignTrace",
+			name = {"enable"},
+			havingValue = "true"
+	)
+	@Bean("feignTraceRequestInterceptora")
+	public RequestInterceptor feignTraceRequestInterceptor(){
+		// 进行fegin 调用时 traceID传递 \c\u000d log.info("注册bean feignTraceRequestInterceptor");
+		return new FeignTraceRequestInterceptor();
+	}
+
+
+
 
 	@Bean
 	public FilterRegistrationBean<AddTraceIdFilter> addTraceIdFilterRegistration() {
@@ -46,7 +91,6 @@ public class EnableLogChainConfiguration {
 //		filterRegistrationBean.setUrlPatterns(Collections.singleton("/*"));
 		return filterRegistrationBean;
 	}
-
 	@Bean
 	public AddTraceIdFilter addTraceIdFilter() {
 	  // 打印日志项目地址\a\u000d log.info(logPluginsBanner);
