@@ -1,3 +1,7 @@
-need:
+log-plugin:
+  zuul:
+    enable: true
+  feignTrace:
+    enable: false
   addTraceId:
-    uris: /*
+    uri: /*

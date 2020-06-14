@@ -1,5 +1,7 @@
 package com.enhance.aspect;
 
+import static com.enhance.constant.LogPluginConst.TRACEID;
+
 import com.enhance.constant.LogConst;
 import com.enhance.constant.LogConst.Action;
 import java.util.HashMap;
@@ -22,7 +24,6 @@ import org.slf4j.profiler.Profiler;
 public final class LogThreadContext {
 
   public final static ThreadLocal<LogThreadContext> LOG_THREAD_CONTEXT = new InheritableThreadLocal<>();
-  private final static String TRACEID = "X-B3-TraceId";
 
   /**
    * 当前方法的日志上下文
