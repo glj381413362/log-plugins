@@ -81,18 +81,21 @@
 
 ## 请求traceID配置
 1. 请求traceID uri配置
+配置需要打印traceID的url路径规则,对满足路径规则的请求生成一个唯一ID,放到请求头中
 ```yml
 log-plugin:
   addTraceId:
     uris: /v1/*,/v2/*
 ```
 2. zuul网关traceID传递开启配置
+如果使用的是zuul做网关，在传递通过请求头traceID时需要实现ZuulFilter然后才能传递,为了简便使用,只需要做如下配置就可开启traceID传递。
 ```yml
 log-plugin:
   zuul:
     enable: true
 ```
 3. feign traceID 传递开启配置 
+feign请求时,请求头信息需要实现RequestInterceptor然后才能传递,为了简便使用,只需要做如下配置就可开启traceID传递。
 ```yml
 log-plugin:
   feignTrace:
