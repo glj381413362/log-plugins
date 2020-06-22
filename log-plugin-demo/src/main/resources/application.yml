@@ -1,8 +1,9 @@
 server:
   port: 8080
 
-
 spring:
+  profiles:
+    active: dev
   datasource:
 #    url: jdbc:h2:mem:glj_test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     url: jdbc:h2:file:./h2data;AUTO_SERVER=TRUE
@@ -44,3 +45,21 @@ log-plugin:
     enable: true
   addTraceId:
     uri: /*
+
+
+plugin:
+  log:
+    trace:
+      uri:
+      - /v1/*
+      - /V2/*
+      enable-zuul: true
+      enable-feign: false
+---
+
+
+plugin:
+  spring:
+    supportsClass: com.enhance.logplugin.demo
+    multilingual: false
+    printStackProfile: dev,uat,sit,test
