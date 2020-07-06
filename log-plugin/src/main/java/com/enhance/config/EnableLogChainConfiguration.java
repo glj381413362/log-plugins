@@ -98,9 +98,6 @@ public class EnableLogChainConfiguration {
 	}
 	@Bean
 	public AddTraceIdFilter addTraceIdFilter() {
-	  // 打印日志项目地址\a\u000d log.info(logPluginsBanner);
-		// 定义使用教程地址\b\u000d String a = " \r\n==================================================================\r\n                     log-plugin 使用教程 \r\n CSDN: https://blog.csdn.net/qq_21239913/article/details/106624875 \r\n 博客: http://jessica.glj-site.com:8888/?p=251 \r\n==================================================================";
-		// 打印教程地址\c\u000d log.info(a);
 		return new AddTraceIdFilter();
 	}
 }
