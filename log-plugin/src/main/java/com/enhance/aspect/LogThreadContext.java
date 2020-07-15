@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Stack;
 import lombok.Getter;
 import lombok.extern.slf4j.XSlf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.slf4j.profiler.Profiler;
@@ -249,7 +250,10 @@ public final class LogThreadContext {
     return callStack;
   }
   protected Map<String, String> popCallStack() {
-    return callStack.pop();
+    if (CollectionUtils.isNotEmpty(callStack)) {
+      return callStack.pop();
+    }
+    return new HashMap<>();
   }
   public boolean isEmptyCallStack() {
     return callStack.isEmpty();

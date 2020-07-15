@@ -1,10 +1,5 @@
 package com.enhance.logplugin.demo.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-import com.alibaba.fastjson.support.spring.PropertyPreFilters.MySimplePropertyPreFilter;
-import com.enhance.annotations.EnableProfiler;
 import com.enhance.annotations.Log;
 import com.enhance.annotations.LogProfiler;
 import com.enhance.constant.LogConst.Action;
@@ -13,7 +8,6 @@ import com.enhance.logplugin.demo.controller.dto.OrderDetailDTO.OrderEntryDetail
 import com.enhance.logplugin.demo.controller.dto.OrderDetailDTO.UserDTO;
 import com.enhance.logplugin.demo.entity.Order;
 import com.enhance.logplugin.demo.service.OrderService;
-import com.enhance.logplugin.demo.util.SleepUtil;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -29,13 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author gongliangjun 2019/07/01 11:18
- */
+/** @author gongliangjun 2019/07/01 11:18 */
 @XSlf4j
 @RestController
 @RequestMapping(value = "/orders")
@@ -44,8 +32,6 @@ public class OrderController {
 
   private final OrderService orderService;
 
-
-
   /**
    * 获取订单列表
    *
@@ -53,15 +39,18 @@ public class OrderController {
    * @author gongliangjun 2020-06-05 9:40 AM
    * @return java.util.List<com.enhance.logplugin.demo.entity.Order>
    */
-  @Log(itemIds = "order.orderCode",itemType = "order",action = Action.Q,printOutParamSize = false)
+  @Log(
+      itemIds = "order.orderCode",
+      itemType = "order",
+      action = Action.Q,
+      printOutParamSize = false)
   @GetMapping()
   public List<Order> queryOrder(Order order) {
     log.info("开始查询订单列表...");
     return orderService.listOrder(order);
   }
 
-
-  @LogProfiler(itemIds = "orderCode",itemType = "order",action = Action.Q)
+  @LogProfiler(itemIds = "orderCode", itemType = "order", action = Action.Q)
   @GetMapping("/{orderCode}")
   public OrderDetailDTO queryOrder(@PathVariable("orderCode") String orderCode) {
 
@@ -77,25 +66,32 @@ public class OrderController {
    * @return com.enhance.logplugin.demo.entity.Order
    */
   @PutMapping()
-  @Log(excludeInParam = {"OrderDetailDTO","UserDTO"})
-  public Order updateOrder(@RequestBody @Validated(value = {OrderDetailDTO.Update.class}) OrderDetailDTO orderDetailDTO) {
+  @Log(excludeInParam = {"OrderDetailDTO", "UserDTO"})
+  public Order updateOrder(
+      @RequestBody @Validated(value = {OrderDetailDTO.Update.class})
+          OrderDetailDTO orderDetailDTO) {
     return null;
-//    return orderService.update(orderDetailDTO);
+    //    return orderService.update(orderDetailDTO);
   }
+
   @PostMapping("/batch-update")
-  @Log(excludeInParam = {"OrderDetailDTO","UserDTO"})
-  public Order batchUpdateOrder(@RequestBody @Validated(value = {OrderDetailDTO.Update.class}) List<OrderDetailDTO> detailDTOS) {
+  @Log(excludeInParam = {"OrderDetailDTO", "UserDTO"})
+  public Order batchUpdateOrder(
+      @RequestBody @Validated(value = {OrderDetailDTO.Update.class})
+          List<OrderDetailDTO> detailDTOS) {
     return null;
-//    return orderService.update(orderDetailDTO);
+    //    return orderService.update(orderDetailDTO);
   }
+
   @PostMapping("/update")
   public Order update(@RequestBody OrderDetailDTO detailDTO) {
     @NotNull UserDTO user = detailDTO.getUser();
-    @NotNull @Valid List<OrderEntryDetail> orderEntryDetails = detailDTO.getOrderEntryDetails();
+    @NotNull
+    @Valid
+    List<OrderEntryDetail> orderEntryDetails = detailDTO.getOrderEntryDetails();
     OrderDetailDTO dto = detailDTO;
     dto.setUser(null);
     dto.setOrderEntryDetails(null);
     return orderService.handelUpdate(dto, user, orderEntryDetails);
   }
-
 }

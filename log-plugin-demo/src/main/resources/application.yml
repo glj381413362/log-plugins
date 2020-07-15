@@ -57,9 +57,21 @@ plugin:
       enable-feign: false
 ---
 
-
 plugin:
   spring:
-    supportsClass: com.enhance.logplugin.demo
-    multilingual: false
-    printStackProfile: dev,uat,sit,test
+    response:
+      multilingual: false
+      print-stack-profiles:
+      - dev
+      - uat
+      - sit
+      - test
+      support-class-prefix:
+      - com.enhance.logplugin.demo
+  log:
+    trace:
+      uri:
+      - /v1/*
+      - /V2/*
+      enable-zuul: true
+      enable-feign: true
