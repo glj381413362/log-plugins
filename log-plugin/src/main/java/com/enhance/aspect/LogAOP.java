@@ -163,9 +163,12 @@ public class LogAOP implements ApplicationContextAware {
       //===============================================================================
       //  先对自己的code出栈 并且清除MDC
       //===============================================================================
-      Map<String, String> popCallStack = ltc.popCallStack();
-      clearMDC(popCallStack.keySet());
-
+      // 是否需要打印日志
+      boolean printLog = ltc.getCurrentLogContext().printInfoLog();
+      if (printLog) {
+        Map<String, String> popCallStack = ltc.popCallStack();
+        clearMDC(popCallStack.keySet());
+      }
       if (!ltc.isEmptyCallStack()) {
         Map<String, String> currentMethodStack = ltc.peekCallStack();
         //===============================================================================
@@ -274,6 +277,7 @@ public class LogAOP implements ApplicationContextAware {
 
     Logger logger = LoggerFactory.getLogger(targetClass);
     if (logger.isDebugEnabled() || printLog) {
+      logContext.setPrintInfoLog(true);
       //===============================================================================
       //  保存action、itemType、itemId到MDC
       //===============================================================================
@@ -319,6 +323,8 @@ public class LogAOP implements ApplicationContextAware {
           logger.debug(mesInfo.toString(), methodStr);
         }
       }
+    }else {
+      logContext.setPrintInfoLog(false);
     }
     return logger;
   }
