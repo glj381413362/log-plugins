@@ -3,6 +3,7 @@ package com.enhance.logplugin.demo.service;
 import com.common.tools.util.BeanUtil;
 import com.common.tools.util.ListUtil;
 import com.common.tools.util.exception.BaseException;
+import com.common.tools.util.exception.Msg;
 import com.enhance.annotations.Log;
 import com.enhance.annotations.LogProfiler;
 import com.enhance.aspect.LogThreadContext;
@@ -143,7 +144,7 @@ public class OrderServiceImpl implements AopProxy<OrderService>, OrderService {
     Optional<Order> orderOptional = orderMapper.findById(orderDetailDTO.getOrderId());
     Order order =
         orderOptional.orElseThrow(
-            () -> new BaseException("根据订单id[{}],未查询到相应订单", orderDetailDTO.getOrderId()));
+            () -> new BaseException(Msg.of("根据订单id[{}],未查询到相应订单"), orderDetailDTO.getOrderId()));
     BeanUtil.copySourceToTarget(orderDetailDTO, order);
     order = orderMapper.saveAndFlush(order);
     log.info("修改订单结束");
@@ -282,7 +283,7 @@ public class OrderServiceImpl implements AopProxy<OrderService>, OrderService {
       }
       detailDTO.setOrderEntryDetails(orderEntryArrayList);
     } else {
-      throw new BaseException("根据orderCode:{}未查询到订单行数据", order.getOrderCode());
+      throw new BaseException(Msg.of("根据orderCode:{}未查询到订单行数据"), order.getOrderCode());
     }
     log.info("订单行数据处理完成");
   }
@@ -292,7 +293,7 @@ public class OrderServiceImpl implements AopProxy<OrderService>, OrderService {
   public void conversionSku(Long skuId, OrderDetailDTO.Sku skuDto) {
     log.info("开始处理商品数据");
     Optional<Sku> skuOptional = skuMapper.findById(skuId);
-    Sku sku = skuOptional.orElseThrow(() -> new BaseException("根据skuId:{}未查询到商品数据", skuId));
+    Sku sku = skuOptional.orElseThrow(() -> new BaseException(Msg.of("根据skuId:{}未查询到商品数据"), skuId));
     BeanUtil.copySourceToTarget(sku, skuDto);
     log.info("商品数据处理结束");
   }

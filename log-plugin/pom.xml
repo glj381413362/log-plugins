@@ -198,7 +198,7 @@
         <profile>
             <id>default</id>
             <properties>
-                <SNAPSHOT.version>1.0-SNAPSHOT</SNAPSHOT.version>
+                <SNAPSHOT.version>1.0.0-SNAPSHOT</SNAPSHOT.version>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault><!-- 默认激活该profile节点-->
@@ -208,21 +208,21 @@
             <!-- 测试环境 -->
             <id>sit</id>
             <properties>
-                <SNAPSHOT.version>SIT-1.0-SNAPSHOT</SNAPSHOT.version>
+                <SNAPSHOT.version>SIT-1.0.0-SNAPSHOT</SNAPSHOT.version>
             </properties>
         </profile>
         <profile>
             <!-- uat环境 -->
             <id>uat</id>
             <properties>
-                <SNAPSHOT.version>1.0-SNAPSHOT</SNAPSHOT.version>
+                <SNAPSHOT.version>1.0.0-SNAPSHOT</SNAPSHOT.version>
             </properties>
         </profile>
         <profile>
             <!-- 生产环境 -->
             <id>prod</id>
             <properties>
-                <SNAPSHOT.version>1.0-SNAPSHOT</SNAPSHOT.version>
+                <SNAPSHOT.version>1.0.0-SNAPSHOT</SNAPSHOT.version>
             </properties>
         </profile>
     </profiles>
