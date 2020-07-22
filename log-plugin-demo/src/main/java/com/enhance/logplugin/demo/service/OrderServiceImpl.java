@@ -295,6 +295,11 @@ public class OrderServiceImpl implements AopProxy<OrderService>, OrderService {
     Optional<Sku> skuOptional = skuMapper.findById(skuId);
     Sku sku = skuOptional.orElseThrow(() -> new BaseException(Msg.of("根据skuId:{}未查询到商品数据"), skuId));
     BeanUtil.copySourceToTarget(sku, skuDto);
-    log.info("商品数据处理结束");
+    try {
+      log.info("商品数据处理结束");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
+
 }

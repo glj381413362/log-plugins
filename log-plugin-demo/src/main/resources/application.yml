@@ -36,7 +36,7 @@ spring:
 #log
 logging:
   level:
-    com.enhance.logplugin.demo: debug
+    com.enhance.logplugin.demo: info
 
 log-plugin:
   zuul:
